@@ -4,7 +4,6 @@ import json
 import time
 from pathlib import Path
 
-import cv2
 import joblib
 import mediapipe as mp
 from mediapipe.tasks import python as mp_python
@@ -12,6 +11,7 @@ from mediapipe.tasks.python import vision
 import numpy as np
 import pandas as pd
 import streamlit as st
+from PIL import Image
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
@@ -62,9 +62,9 @@ def get_hand_landmarker():
     return vision.HandLandmarker.create_from_options(options)
 
 
-def extract_landmarks(image: np.ndarray):
+def extract_landmarks(image: Image.Image):
     """Return normalized 63-value hand landmark vector, or None if no hand."""
-    rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    rgb = np.asarray(image.convert("RGB"))
     mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb)
     result = get_hand_landmarker().detect(mp_image)
     if not result.hand_landmarks:
@@ -110,8 +110,7 @@ with control_col:
         digest = str(hash(camera_image.getvalue()))
         feature_key = f"collection_features_{digest}"
         if feature_key not in st.session_state:
-            raw = np.frombuffer(camera_image.getvalue(), dtype=np.uint8)
-            frame = cv2.imdecode(raw, cv2.IMREAD_COLOR)
+            frame = Image.open(camera_image).convert("RGB")
             with st.spinner("Finding your hand landmarks…"):
                 st.session_state[feature_key] = extract_landmarks(frame)
         features = st.session_state[feature_key]
@@ -173,8 +172,7 @@ if live_image:
     digest = str(hash(live_image.getvalue()))
     feature_key = f"live_features_{digest}"
     if feature_key not in st.session_state:
-        raw = np.frombuffer(live_image.getvalue(), dtype=np.uint8)
-        frame = cv2.imdecode(raw, cv2.IMREAD_COLOR)
+        frame = Image.open(live_image).convert("RGB")
         with st.spinner("Reading the hand shape…"):
             st.session_state[feature_key] = extract_landmarks(frame)
     features = st.session_state[feature_key]
