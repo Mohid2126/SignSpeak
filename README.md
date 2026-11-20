@@ -10,7 +10,7 @@ A beginner-friendly hand-sign recognition lab. Collect your own webcam examples,
 4. A Random Forest model learns patterns from your examples.
 5. A new snapshot is classified against the signs you taught it.
 
-The project starts with still hand shapes rather than moving gestures. It does not upload the camera image; examples are written to `data/landmarks.csv` on your Mac.
+The project starts with still hand shapes rather than moving gestures. When running locally, camera snapshots are processed on your Mac and landmark examples are written to `data/landmarks.csv`. When deployed online, snapshots are sent to the cloud app's server for processing, and the landmark examples are stored on that server. Avoid using real sign-language communication or sensitive personal images in a public demo.
 
 ## Mac setup
 
