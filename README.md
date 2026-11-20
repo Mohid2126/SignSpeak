@@ -14,7 +14,7 @@ The project starts with still hand shapes rather than moving gestures. When runn
 
 ## Mac setup
 
-Install Python 3.11 or 3.12 if you don't already have one. MediaPipe wheels may not support every Python release, so use Python 3.12 for this project.
+Install Python 3.11 or 3.12 if you don't already have one. The app uses pinned, compatible versions of MediaPipe and OpenCV so the hand detector can start reliably.
 
 ```bash
 cd ~/Documents/Codex/2026-11-19/ok/SignSpeak
@@ -31,7 +31,7 @@ Open the local URL Streamlit prints (usually http://localhost:8501). Safari will
 
 1. Push this project to a GitHub repository.
 2. In Streamlit Community Cloud, create an app from that repository and set the main file to `app.py`.
-3. Choose Python 3.12 in the app's advanced settings if a Python version option is shown.
+3. The dependencies are pinned to versions that work together on Streamlit Community Cloud.
 4. Deploy, open the HTTPS app URL, and allow camera access in the browser.
 
 The generic hand-landmark model in `models/hand_landmarker.task` is part of the app. Training examples and your trained classifier are intentionally ignored by Git, so each deployment starts with an empty training set. Camera snapshots and resulting examples are handled by the Streamlit server; when hosted online, the server is the cloud app, not your Mac. Do not capture sensitive images or personal information in a public demo.
